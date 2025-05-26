@@ -133,6 +133,7 @@ void setup() {
   pinMode(A0,INPUT);// put your setup code here, to run once:
   Serial.begin(9600);
   delay(1000);
+  Serial.println("Hello");
   for(int i = 0; i<16;i++){
     previous_resistance_value[i] = filteredAnalogRead(A0+i);
     index_of_current_substate[i] = find_index_of_current_substate(previous_resistance_value[i]);
