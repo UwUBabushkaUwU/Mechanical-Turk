@@ -110,7 +110,7 @@ void loop() {
   if(abs(previous_resistance_value-current_resistance_value)>threshold_for_value_difference&&
     differs_by_one_bit(index_of_current_state, current_resistance_value)){//a move is started- it is divided into four parts: beginnign, intermediate1, intermediate2, end. in each part a piece is either lifted or placed
     Serial.println("Move started");
-    first_move_of_the_game = true;
+    //first_move_of_the_game = true;
     move_starting_time = millis()/1000;
     index_of_previous_state = index_of_current_state;
     index_of_current_state = find_index_of_current_state(current_resistance_value);

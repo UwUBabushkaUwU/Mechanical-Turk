@@ -18,14 +18,14 @@ const int codes_and_values[16][5] = {
 };
 
 const char* squares_and_units[][5]{
-  {"A8", "B8", "C8", "D8", "A0"}, {"H8", "F8", "G8","E8", "A1"},
-  {"A7", "B7", "C7", "D7", "A2"}, {"H7", "F7", "G7","E7", "A3"},
-  {"A6", "B6", "C6", "D6", "A4"}, {"H6", "F6", "G6","E6", "A5"},
-  {"A5", "B5", "C5", "D5", "A6"}, {"H5", "F5", "G5","E5", "A7"},
-  {"A4", "B4", "C4", "D4", "A8"}, {"H4", "F4", "G4","E4", "A9"},
-  {"A3", "B3", "C3", "D3", "A10"}, {"H3", "F3", "G3","E3", "A11"},
-  {"A2", "B2", "C2", "D2", "A12"}, {"H2", "F2", "G2","E2", "A13"},
-  {"A1", "B1", "C1", "D1", "A14"}, {"H1", "F1", "G1","E1", "A15"},
+  {"A8", "B8", "C8", "D8", "A0"}, {"H8", "G8", "F8","E8", "A1"},
+  {"A7", "B7", "C7", "D7", "A2"}, {"H7", "G7", "F7","E7", "A3"},
+  {"A6", "B6", "C6", "D6", "A4"}, {"H6", "G6", "F6","E6", "A5"},
+  {"A5", "B5", "C5", "D5", "A6"}, {"H5", "G5", "F5","E5", "A7"},
+  {"A4", "B4", "C4", "D4", "A8"}, {"H4", "G4", "F4","E4", "A9"},
+  {"A3", "B3", "C3", "D3", "A10"}, {"H3", "G3", "F3","E3", "A11"},
+  {"A2", "B2", "C2", "D2", "A12"}, {"H2", "G2", "F2","E2", "A13"},
+  {"A1", "B1", "C1", "D1", "A14"}, {"H1", "G1", "F1","E1", "A15"},
 };
 int threshold_for_value_difference = 7;
 int threshold_for_one_move = 5; //in seconds
@@ -34,6 +34,7 @@ int current_resistance_value[16], move_starting_time=0,index_of_current_substate
 char *first_activated_square,*second_activated_square,*third_activated_square,*fourth_activated_square;
 bool first_move_of_the_game = true;
 bool move_in_progress = false;
+int voltage_reading_offset = 20;
 //functions
 
 int find_index_of_current_substate(int current_resistance_value){
@@ -75,7 +76,7 @@ bool differs_by_one_bit(int prev_index, int current_value) {
 int filteredAnalogRead(int pin, int n = 15, int m = 15) {
   int readings[n];
   for (int i = 0; i < n; i++) {
-    readings[i] = analogRead(pin);
+    readings[i] = analogRead(pin)+voltage_reading_offset;
     delay(5); 
   }
   for (int i = 0; i < n - 1; i++) {
