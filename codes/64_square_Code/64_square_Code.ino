@@ -29,27 +29,27 @@ const char* squares_and_units[][5]{
 };
 int threshold_for_value_difference = 7;
 int threshold_for_one_move = 5; //in seconds
-int delay_for_parts = 200; //in ms
+int delay_for_parts = 300; //in ms
 int current_resistance_value[16], move_starting_time=0,index_of_current_substate[16],index_of_previous_substate[16],previous_resistance_value[16];
 char *first_activated_square,*second_activated_square,*third_activated_square,*fourth_activated_square;
 bool first_move_of_the_game = true;
 bool move_in_progress = false;
-int voltage_reading_offset = 20;
+int voltage_reading_offset = 0;
 //functions
 
 int find_index_of_current_substate(int current_resistance_value){
-  for(int i=0; i<16; i++){
-    if(abs(codes_and_values[i][4]-current_resistance_value)<= threshold_for_value_difference){
-      // Serial.println(" ");
-      // Serial.print("Current state: ");
-      // for (int j = 0; j < 5; j++) {
-      //   Serial.print(codes_and_values[i][j]);
-      //   Serial.print(" ");
-      // }
-      return i;
-    }
+  int closest_index = -1;
+  int min_diff = INT8_MAX;
+
+  for (int i = 0; i < 16; i++) {
+      int diff = abs(codes_and_values[i][4] - current_resistance_value);
+      if (diff < min_diff) {
+          min_diff = diff;
+          closest_index = i;
+      }
   }
-  return -1;
+
+  return closest_index;
 }
 char* find_activated_square(int index_of_current_substate[16], int index_of_previous_substate[16]){
   for(int i = 0 ; i<16;i++){
@@ -107,18 +107,57 @@ int filteredAnalogRead(int pin, int n = 15, int m = 15) {
 bool condition(){
   for(int i = 0; i < 16; i++){
     if(abs(previous_resistance_value[i]-current_resistance_value[i])>threshold_for_value_difference&&
-    differs_by_one_bit(index_of_current_substate[i], current_resistance_value[i])){
+    differs_by_one_bit(index_of_previous_substate[i], current_resistance_value[i])){
       return true;
     }
   }
   return false;
 }
 
-void update_current_and_previous_resistance_values(){
+void update_current_and_previous_resistance_values(bool update_previous=true, bool update_current = true,int SAMPLES=50, int median_threshold = 15){
+  if(update_previous){
+    for(int i = 0; i < 16; i++){
+      previous_resistance_value[i]=current_resistance_value[i];
+    }
+  }
+  if(!update_current) return;
   
-  for(int i = 0; i < 16; i++){
-    previous_resistance_value[i]=current_resistance_value[i];
-    current_resistance_value[i] = filteredAnalogRead(A0+i);
+  int readings[16][SAMPLES];
+
+  // Step 1: Gather readings
+  for (int sample = 0; sample < SAMPLES; sample++) {
+    for (int pin = 0; pin < 16; pin++) {
+      readings[pin][sample] = analogRead(pin) + voltage_reading_offset;
+    }
+    delay(5); // One delay per sample, shared for all pins
+  }
+
+  // Step 2: Process each pin's readings
+  for (int pin = 0; pin < 16; pin++) {
+    // Sort readings to find median
+    for (int i = 0; i < SAMPLES - 1; i++) {
+      for (int j = i + 1; j < SAMPLES; j++) {
+        if (readings[pin][i] > readings[pin][j]) {
+          int temp = readings[pin][i];
+          readings[pin][i] = readings[pin][j];
+          readings[pin][j] = temp;
+        }
+      }
+    }
+
+    int median = readings[pin][SAMPLES / 2];
+    long sum = 0;
+    int count = 0;
+
+    // Average values close to median
+    for (int i = 0; i < SAMPLES; i++) {
+      if (abs(readings[pin][i] - median) <= median_threshold) {
+        sum += readings[pin][i];
+        count++;
+      }
+    }
+
+    current_resistance_value[pin] = (count > 0) ? sum / count : median;
   }
   return;
 }
@@ -129,24 +168,60 @@ void update_index_of_current_substate_and_previous_substate(){
   }
 }
 
+void move_over(){
+  Serial.println(" ");
+  Serial.print("Move Over");
+  for(int i = 0; i < 16;i++){
+    for(int j = 0 ;j<4 ; j++){
+      Serial.print(codes_and_values[find_index_of_current_substate(current_resistance_value[i])][j]);
+      Serial.print(" ");
+    }
+    if(i%2) Serial.println(" ");
+    else Serial.print(" ");
+    
+  }
+  return;
+}
+
 ///////////////////////////////////////////////////////////////
 void setup() {
   pinMode(A0,INPUT);// put your setup code here, to run once:
   Serial.begin(9600);
   delay(1000);
   Serial.println("Hello");
-  for(int i = 0; i<16;i++){
-    previous_resistance_value[i] = filteredAnalogRead(A0+i);
-    index_of_current_substate[i] = find_index_of_current_substate(previous_resistance_value[i]);
+  update_current_and_previous_resistance_values(false,true);
+  update_current_and_previous_resistance_values();
+  Serial.println("current and previous resistance  values have been set");
+  for(int i = 0; i < 16; i++){
+    //index_of_previous_substate[i] = index_of_current_substate[i];
+    index_of_current_substate[i] = find_index_of_current_substate(current_resistance_value[i]);
   }
+  for(int i = 0; i < 16;i++){
+    Serial.print(current_resistance_value[i]);
+    Serial.print(" ");
+    if(i%2) Serial.println(" ");
+    else Serial.print(" ");
+  }
+    
   
+  Serial.println(" ");
+  for(int i = 0; i < 16;i++){
+    for(int j = 0 ;j<4 ; j++){
+      Serial.print(codes_and_values[find_index_of_current_substate(current_resistance_value[i])][j]);
+      Serial.print(" ");
+    }
+    if(i%2) Serial.println(" ");
+    else Serial.print(" ");
+    
+  }
   
 }
 
 void loop() {
-  for(int i = 0; i < 16; i++){
-    current_resistance_value[i] = filteredAnalogRead(A0+i);
-  }
+  update_current_and_previous_resistance_values();
+  update_index_of_current_substate_and_previous_substate();
+  
+
   
   
   first_activated_square = NULL;
@@ -158,7 +233,6 @@ void loop() {
     Serial.println("Move started");
     
     move_starting_time = millis()/1000;
-    update_index_of_current_substate_and_previous_substate();
     first_activated_square = find_activated_square(index_of_current_substate,index_of_previous_substate);
     Serial.println(" ");
     Serial.print("first_activated_square: ");
@@ -166,8 +240,8 @@ void loop() {
     delay(delay_for_parts);
     while(millis()/1000-move_starting_time<threshold_for_one_move){//intermediate1
       update_current_and_previous_resistance_values();
+      update_index_of_current_substate_and_previous_substate();
       if(condition()){
-        update_index_of_current_substate_and_previous_substate();
         second_activated_square = find_activated_square(index_of_current_substate,index_of_previous_substate);// can add the check that if first = second then restart the move
         Serial.println(" ");
         Serial.print("second_activated_square: ");
@@ -175,8 +249,8 @@ void loop() {
         delay(delay_for_parts);
         while(millis()/1000-move_starting_time<threshold_for_one_move){//intermediate2 or end for capture
           update_current_and_previous_resistance_values();
+          update_index_of_current_substate_and_previous_substate();
           if(condition()){
-            update_index_of_current_substate_and_previous_substate();
             third_activated_square = find_activated_square(index_of_current_substate,index_of_previous_substate);
             Serial.println(" ");
             Serial.print("third_activated_square: ");
@@ -186,19 +260,14 @@ void loop() {
               Serial.print("captured. Move: ");
               Serial.print(first_activated_square);
               Serial.print(second_activated_square);
-              Serial.println(" ");
-              Serial.print("Move Over");
-              first_activated_square = NULL;
-              second_activated_square = NULL;
-              third_activated_square = NULL;
-              fourth_activated_square =NULL;
+              move_over();
               return;//because if we break it it will again go in the while loop
             }
             delay(delay_for_parts);
             while(millis()/1000-move_starting_time<threshold_for_one_move){//intermideate3 or end for enpassant or promotion
               update_current_and_previous_resistance_values();
+              update_index_of_current_substate_and_previous_substate();
               if(condition()){
-                update_index_of_current_substate_and_previous_substate();
                 fourth_activated_square = find_activated_square(index_of_current_substate,index_of_previous_substate);
                 Serial.println(" ");
                 Serial.print("fourth_activated_square: ");
@@ -209,12 +278,7 @@ void loop() {
                 Serial.print(second_activated_square);
                 Serial.print(third_activated_square);
                 Serial.print(fourth_activated_square);
-                Serial.println(" ");
-                Serial.print("Move Over");
-                first_activated_square = NULL;
-                second_activated_square = NULL;
-                third_activated_square = NULL;
-                fourth_activated_square =NULL;
+                move_over();
                 return;
               }
             }
@@ -225,11 +289,7 @@ void loop() {
               Serial.print(second_activated_square);
               Serial.print(third_activated_square);
               Serial.println(" ");
-              Serial.print("Move Over");
-              first_activated_square = NULL;
-              second_activated_square = NULL;
-              third_activated_square = NULL;
-              fourth_activated_square =NULL;
+              move_over();
               return;
             }
           }
@@ -239,22 +299,12 @@ void loop() {
           Serial.print("simple move. Move: ");
           Serial.print(first_activated_square);
           Serial.print(second_activated_square);
-          first_activated_square = NULL;
-          second_activated_square = NULL;
-          third_activated_square = NULL;
-          fourth_activated_square =NULL;
-          Serial.println(" ");
-          Serial.print("Move Over");
+          move_over();
           return;
         }
       }
     }
-  Serial.println(" ");
-  Serial.print("Move Over");
-  }
-  
-  for(int i = 0; i < 16; i++){
-    previous_resistance_value[i] = current_resistance_value[i];
+  move_over();
   }
 }
 
