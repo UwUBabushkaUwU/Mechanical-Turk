@@ -114,7 +114,7 @@ bool condition(){
   return false;
 }
 
-void update_current_and_previous_resistance_values(bool update_previous=true, bool update_current = true,int SAMPLES=50, int median_threshold = 15){
+void update_current_and_previous_resistance_values(bool update_previous=true, bool update_current = true,int SAMPLES=100, int median_threshold = 15){
   if(update_previous){
     for(int i = 0; i < 16; i++){
       previous_resistance_value[i]=current_resistance_value[i];
@@ -136,7 +136,7 @@ void update_current_and_previous_resistance_values(bool update_previous=true, bo
   for (int pin = 0; pin < 16; pin++) {
     // Sort readings to find median
     for (int i = 0; i < SAMPLES - 1; i++) {
-      for (int j = i + 1; j < SAMPLES; j++) {
+      for (int j = i + 1; j < SAMPLES; j++) { 
         if (readings[pin][i] > readings[pin][j]) {
           int temp = readings[pin][i];
           readings[pin][i] = readings[pin][j];

@@ -2283,12 +2283,23 @@
 				)
 			)
 		)
-		(symbol "Regulator_Switching:LM2596S-ADJ"
+		(symbol "Regulator_Linear:LM7805_TO220"
+			(pin_names
+				(offset 0.254)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "U"
-				(at -10.16 6.35 0)
+				(at -3.81 3.175 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "LM7805_TO220"
+				(at 0 3.175 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -2296,27 +2307,26 @@
 					(justify left)
 				)
 			)
-			(property "Value" "LM2596S-ADJ"
-				(at 0 6.35 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" "Package_TO_SOT_SMD:TO-263-5_TabPin3"
-				(at 1.27 -6.35 0)
+			(property "Footprint" "Package_TO_SOT_THT:TO-220-3_Vertical"
+				(at 0 5.715 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 						(italic yes)
 					)
-					(justify left)
 					(hide yes)
 				)
 			)
-			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm2596.pdf"
+			(property "Datasheet" "https://www.onsemi.cn/PowerSolutions/document/MC7800-D.PDF"
+				(at 0 -1.27 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Positive 1A 35V Linear Regulator, Fixed Output 5V, TO-220"
 				(at 0 0 0)
 				(effects
 					(font
@@ -2325,7 +2335,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Adjustable 3A Step-Down Voltage Regulator, TO-263"
+			(property "ki_keywords" "Voltage Regulator 1A Positive"
 				(at 0 0 0)
 				(effects
 					(font
@@ -2334,7 +2344,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "Step-Down Voltage Regulator Adjustable 3A"
+			(property "ki_fp_filters" "TO?220*"
 				(at 0 0 0)
 				(effects
 					(font
@@ -2343,19 +2353,10 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "TO?263*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "LM2596S-ADJ_0_1"
+			(symbol "LM7805_TO220_0_1"
 				(rectangle
-					(start -10.16 5.08)
-					(end 10.16 -5.08)
+					(start -5.08 1.905)
+					(end 5.08 -5.08)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -2365,11 +2366,11 @@
 					)
 				)
 			)
-			(symbol "LM2596S-ADJ_1_1"
+			(symbol "LM7805_TO220_1_1"
 				(pin power_in line
-					(at -12.7 2.54 0)
+					(at -7.62 0 0)
 					(length 2.54)
-					(name "VIN"
+					(name "VI"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2377,24 +2378,6 @@
 						)
 					)
 					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 12.7 -2.54 180)
-					(length 2.54)
-					(name "OUT"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2412,43 +2395,25 @@
 							)
 						)
 					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "VO"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
 					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at 12.7 2.54 180)
-					(length 2.54)
-					(name "FB"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -12.7 -2.54 0)
-					(length 2.54)
-					(name "~{ON}/OFF"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2458,7 +2423,7 @@
 				)
 			)
 		)
-		(symbol "power:+24V"
+		(symbol "power:+5V"
 			(power)
 			(pin_numbers hide)
 			(pin_names
@@ -2475,7 +2440,7 @@
 					(hide yes)
 				)
 			)
-			(property "Value" "+24V"
+			(property "Value" "+5V"
 				(at 0 3.556 0)
 				(effects
 					(font
@@ -2501,7 +2466,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Power symbol creates a global label with name \"+24V\""
+			(property "Description" "Power symbol creates a global label with name \"+5V\""
 				(at 0 0 0)
 				(effects
 					(font
@@ -2519,7 +2484,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "+24V_0_1"
+			(symbol "+5V_0_1"
 				(polyline
 					(pts
 						(xy -0.762 1.27) (xy 0 2.54)
@@ -2557,9 +2522,105 @@
 					)
 				)
 			)
-			(symbol "+24V_1_1"
+			(symbol "+5V_1_1"
 				(pin power_in line
 					(at 0 0 90)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "power:GND"
+			(power)
+			(pin_numbers hide)
+			(pin_names
+				(offset 0) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
 					(length 0)
 					(name "~"
 						(effects
@@ -2586,10 +2647,10 @@
 		(uuid "00035d9c-f38b-4ba6-a3ed-4ca7c8c7013e")
 	)
 	(junction
-		(at 43.18 154.94)
+		(at 90.17 190.5)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "08fc941b-b7e2-419e-89eb-6bcdb9128c46")
+		(uuid "066159c4-3fd2-4eb9-b2c2-ece1de21c4cf")
 	)
 	(junction
 		(at 137.16 54.61)
@@ -2646,12 +2707,6 @@
 		(uuid "5d9fd84c-66b8-4e12-8b5d-b8bd37bf16e9")
 	)
 	(junction
-		(at 181.61 123.19)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5eeeec22-c4a7-458f-8ffc-9260153d7495")
-	)
-	(junction
 		(at 43.18 99.06)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2674,6 +2729,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "8bdcdeb7-7579-470d-9e0e-e079262af0e7")
+	)
+	(junction
+		(at 36.83 190.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8dfdce31-a7bb-4f7d-b84f-5c10a36ced50")
 	)
 	(junction
 		(at 137.16 41.91)
@@ -2706,10 +2767,10 @@
 		(uuid "c77dcb87-d8da-4a82-9e38-8fdcb8373921")
 	)
 	(junction
-		(at 90.17 167.64)
+		(at 44.45 181.61)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "c8c9166a-a3ff-4eae-bc7b-beee87c2d526")
+		(uuid "c7ca5924-0e6d-4e30-b89e-0d21541ea8c1")
 	)
 	(junction
 		(at 90.17 54.61)
@@ -2825,27 +2886,6 @@
 	)
 	(wire
 		(pts
-			(xy 38.1 180.34) (xy 38.1 190.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1b3feaff-710a-44e0-86ac-d97f0035c437")
-	)
-	(wire
-		(pts
-			(xy 137.16 140.97) (xy 137.16 158.75)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 255 0 0 1)
-		)
-		(uuid "1e1f039d-b2a8-4d53-9b90-a55c85c2412c")
-	)
-	(wire
-		(pts
 			(xy 97.79 68.58) (xy 100.33 68.58)
 		)
 		(stroke
@@ -2866,25 +2906,14 @@
 	)
 	(wire
 		(pts
-			(xy 90.17 167.64) (xy 173.99 167.64)
+			(xy 137.16 140.97) (xy 137.16 181.61)
 		)
 		(stroke
 			(width 0)
 			(type default)
-			(color 0 0 0 1)
+			(color 255 0 0 1)
 		)
-		(uuid "248a9c10-2f23-4de7-85cf-4aaddc9481a9")
-	)
-	(wire
-		(pts
-			(xy 173.99 146.05) (xy 181.61 146.05)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 0 0 0 1)
-		)
-		(uuid "2a9cd68d-a5f5-4ea7-a6c2-8f0c7126db62")
+		(uuid "21af7b63-c056-49f1-8498-c468fb0221aa")
 	)
 	(wire
 		(pts
@@ -3043,6 +3072,16 @@
 	)
 	(wire
 		(pts
+			(xy 17.78 181.61) (xy 29.21 181.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "40c58529-3dfc-4c4f-a23a-d0eae5cb8b3c")
+	)
+	(wire
+		(pts
 			(xy 118.11 115.57) (xy 120.65 115.57)
 		)
 		(stroke
@@ -3094,17 +3133,6 @@
 	)
 	(wire
 		(pts
-			(xy 171.45 177.8) (xy 171.45 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 255 0 0 1)
-		)
-		(uuid "5013cb6e-4705-44cd-bf78-a70c7a27d095")
-	)
-	(wire
-		(pts
 			(xy 72.39 54.61) (xy 69.85 54.61)
 		)
 		(stroke
@@ -3135,17 +3163,6 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 167.64) (xy 173.99 146.05)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 0 0 0 1)
-		)
-		(uuid "601fc96b-36ed-45e8-bf4b-1cf065afd169")
-	)
-	(wire
-		(pts
 			(xy 90.17 68.58) (xy 90.17 54.61)
 		)
 		(stroke
@@ -3164,6 +3181,17 @@
 			(type default)
 		)
 		(uuid "62714b77-da15-4285-a2cc-871814dc0d1d")
+	)
+	(wire
+		(pts
+			(xy 181.61 135.89) (xy 151.13 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "65aab096-0c76-475b-9deb-28b3ff917fe5")
 	)
 	(wire
 		(pts
@@ -3209,35 +3237,24 @@
 	)
 	(wire
 		(pts
-			(xy 38.1 154.94) (xy 43.18 154.94)
+			(xy 36.83 189.23) (xy 36.83 190.5)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "6dbb216f-677b-4035-ba75-47c220d65dd1")
+		(uuid "753b38a3-278c-4f9f-92b9-17f7b16ed865")
 	)
 	(wire
 		(pts
-			(xy 54.61 177.8) (xy 171.45 177.8)
+			(xy 90.17 190.5) (xy 36.83 190.5)
 		)
 		(stroke
 			(width 0)
 			(type default)
-			(color 255 0 0 1)
+			(color 0 0 0 1)
 		)
-		(uuid "70254f83-d39f-4d2e-9306-d3faf68d5bb6")
-	)
-	(wire
-		(pts
-			(xy 54.61 154.94) (xy 54.61 177.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 255 0 0 1)
-		)
-		(uuid "725be4ef-7d55-45e2-94a6-f6773fe4bb74")
+		(uuid "77106368-75cf-49d2-96b0-8eb8d6d0ddda")
 	)
 	(wire
 		(pts
@@ -3309,6 +3326,17 @@
 			(color 255 0 0 1)
 		)
 		(uuid "7f7b694a-a725-4785-8252-e31952bc4a40")
+	)
+	(wire
+		(pts
+			(xy 90.17 140.97) (xy 90.17 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "813562ff-7942-46f7-8738-83243ffbba24")
 	)
 	(wire
 		(pts
@@ -3385,7 +3413,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 154.94) (xy 43.18 140.97)
+			(xy 43.18 140.97) (xy 43.18 181.61)
 		)
 		(stroke
 			(width 0)
@@ -3424,6 +3452,28 @@
 			(type default)
 		)
 		(uuid "a472adf0-6282-4bf6-a4bc-41627aecf2c0")
+	)
+	(wire
+		(pts
+			(xy 43.18 181.61) (xy 44.45 181.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "a6db209f-2f91-470e-a2c4-7f835ed3b4b1")
+	)
+	(wire
+		(pts
+			(xy 44.45 181.61) (xy 137.16 181.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "a76e762c-a938-4dcf-af94-41054391aa23")
 	)
 	(wire
 		(pts
@@ -3488,6 +3538,17 @@
 	)
 	(wire
 		(pts
+			(xy 151.13 190.5) (xy 90.17 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "acca0d11-a76c-4a38-9ff8-ef541e6d559b")
+	)
+	(wire
+		(pts
 			(xy 52.07 54.61) (xy 50.8 54.61)
 		)
 		(stroke
@@ -3516,6 +3577,17 @@
 			(color 0 0 0 1)
 		)
 		(uuid "b6c8db12-274e-4ed5-9401-a341e23d0589")
+	)
+	(wire
+		(pts
+			(xy 151.13 135.89) (xy 151.13 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "b8b5b378-f7d8-4910-bc44-085f21e72491")
 	)
 	(wire
 		(pts
@@ -3581,17 +3653,6 @@
 	)
 	(wire
 		(pts
-			(xy 90.17 167.64) (xy 90.17 140.97)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 0 0 0 1)
-		)
-		(uuid "c8bcea80-aefa-43f4-82b9-8a26b5a5dcbd")
-	)
-	(wire
-		(pts
 			(xy 97.79 99.06) (xy 100.33 99.06)
 		)
 		(stroke
@@ -3599,17 +3660,6 @@
 			(type default)
 		)
 		(uuid "cb20ff3f-4fff-4cd6-bec4-3ef935856056")
-	)
-	(wire
-		(pts
-			(xy 43.18 154.94) (xy 54.61 154.94)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 255 0 0 1)
-		)
-		(uuid "cbc5e0c8-0cba-484d-afa6-6d770838ad94")
 	)
 	(wire
 		(pts
@@ -3651,17 +3701,6 @@
 			(type default)
 		)
 		(uuid "d2957330-f262-48e0-8953-723d81ce77f6")
-	)
-	(wire
-		(pts
-			(xy 48.26 167.64) (xy 90.17 167.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 0 0 0 1)
-		)
-		(uuid "d2b30774-3d0f-49a9-9400-11a24c89659e")
 	)
 	(wire
 		(pts
@@ -3775,16 +3814,6 @@
 			(color 255 0 0 1)
 		)
 		(uuid "f5f1d2f7-f119-4fce-a201-c441fd62dc5b")
-	)
-	(wire
-		(pts
-			(xy 171.45 123.19) (xy 181.61 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fa0cb15a-7743-405c-b12b-6974b68727f5")
 	)
 	(wire
 		(pts
@@ -4677,6 +4706,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 36.83 190.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "11f4691e-9853-4508-bfca-ab054abd2c9e")
+		(property "Reference" "#PWR04"
+			(at 36.83 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 36.83 195.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 36.83 190.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 36.83 190.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 36.83 190.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0e5b50e2-0938-4487-a353-a53fdf0ff2c6")
+		)
+		(instances
+			(project ""
+				(path "/7a1cc36f-228e-4763-bdcf-fd4d5555fb01/37d02554-8c7c-4608-bec6-7e3fa96b37a3"
+					(reference "#PWR04")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
 		(at 114.3 128.27 270)
 		(mirror x)
@@ -4740,87 +4835,6 @@
 			(project "Mechanical Turk"
 				(path "/7a1cc36f-228e-4763-bdcf-fd4d5555fb01/37d02554-8c7c-4608-bec6-7e3fa96b37a3"
 					(reference "R1_F2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Regulator_Switching:LM2596S-ADJ")
-		(at 40.64 167.64 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "1a0ab653-4d1d-4ae9-aa21-514b022f9d58")
-		(property "Reference" "U1"
-			(at 34.29 166.3699 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "LM2596S-ADJ"
-			(at 34.29 168.9099 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:TO-263-5_TabPin3"
-			(at 46.99 166.37 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm2596.pdf"
-			(at 40.64 167.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Adjustable 3A Step-Down Voltage Regulator, TO-263"
-			(at 40.64 167.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "3"
-			(uuid "c82e69cc-ff29-4141-ba10-b65de84040c7")
-		)
-		(pin "4"
-			(uuid "67d27cf1-24f5-4073-88b7-3ab5a44bfc61")
-		)
-		(pin "5"
-			(uuid "bf948cb4-846a-464e-8df8-f3d5ea0254f9")
-		)
-		(pin "1"
-			(uuid "de5fd8c7-05d5-491d-b08c-351e546d74ab")
-		)
-		(pin "2"
-			(uuid "c35180bb-adb4-4ba0-a924-ec4bf72c8db0")
-		)
-		(instances
-			(project ""
-				(path "/7a1cc36f-228e-4763-bdcf-fd4d5555fb01/37d02554-8c7c-4608-bec6-7e3fa96b37a3"
-					(reference "U1")
 					(unit 1)
 				)
 			)
@@ -6589,6 +6603,72 @@
 			(project "Mechanical Turk"
 				(path "/7a1cc36f-228e-4763-bdcf-fd4d5555fb01/37d02554-8c7c-4608-bec6-7e3fa96b37a3"
 					(reference "R2_A2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 17.78 181.61 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5422e7c3-8b95-42e2-bae3-cfe8362e7246")
+		(property "Reference" "#PWR03"
+			(at 17.78 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+12V"
+			(at 17.78 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 17.78 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 17.78 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 17.78 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "81760bdf-3858-4590-b2c7-4ee1218b9c1e")
+		)
+		(instances
+			(project ""
+				(path "/7a1cc36f-228e-4763-bdcf-fd4d5555fb01/37d02554-8c7c-4608-bec6-7e3fa96b37a3"
+					(reference "#PWR03")
 					(unit 1)
 				)
 			)
@@ -8922,72 +9002,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+24V")
-		(at 38.1 190.5 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "aa289bea-eaa6-4239-aed2-c4e0aa87cdd5")
-		(property "Reference" "#PWR03"
-			(at 38.1 186.69 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+24V"
-			(at 38.1 195.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 38.1 190.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 38.1 190.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+24V\""
-			(at 38.1 190.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "1a7bb920-94dd-4924-b75f-b2fe27b17ee7")
-		)
-		(instances
-			(project ""
-				(path "/7a1cc36f-228e-4763-bdcf-fd4d5555fb01/37d02554-8c7c-4608-bec6-7e3fa96b37a3"
-					(reference "#PWR03")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R")
 		(at 133.35 68.58 270)
 		(mirror x)
@@ -9666,6 +9680,78 @@
 			(project "Mechanical Turk"
 				(path "/7a1cc36f-228e-4763-bdcf-fd4d5555fb01/37d02554-8c7c-4608-bec6-7e3fa96b37a3"
 					(reference "R1_G7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Regulator_Linear:LM7805_TO220")
+		(at 36.83 181.61 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e94a9b59-293c-4b5d-861c-f82c2cc5d99d")
+		(property "Reference" "U1"
+			(at 36.83 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LM7805_TO220"
+			(at 36.83 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_THT:TO-220-3_Vertical"
+			(at 36.83 175.895 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.onsemi.cn/PowerSolutions/document/MC7800-D.PDF"
+			(at 36.83 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Positive 1A 35V Linear Regulator, Fixed Output 5V, TO-220"
+			(at 36.83 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "62d215c3-68c1-46b7-bbba-26332479b64b")
+		)
+		(pin "2"
+			(uuid "c5ef4778-acbf-414e-a8e8-29f3822654c7")
+		)
+		(pin "1"
+			(uuid "6bcf1c02-699e-444a-855c-c5b5717ee2ea")
+		)
+		(instances
+			(project ""
+				(path "/7a1cc36f-228e-4763-bdcf-fd4d5555fb01/37d02554-8c7c-4608-bec6-7e3fa96b37a3"
+					(reference "U1")
 					(unit 1)
 				)
 			)
