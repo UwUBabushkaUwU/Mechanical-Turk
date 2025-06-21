@@ -114,7 +114,7 @@ bool condition(){
   return false;
 }
 
-void update_current_and_previous_resistance_values(bool update_previous=true, bool update_current = true,int SAMPLES=100, int median_threshold = 15){
+void update_current_and_previous_resistance_values(bool update_previous=true, bool update_current = true,int SAMPLES=100, int median_threshold = 10x  ){
   if(update_previous){
     for(int i = 0; i < 16; i++){
       previous_resistance_value[i]=current_resistance_value[i];
@@ -168,20 +168,27 @@ void update_index_of_current_substate_and_previous_substate(){
   }
 }
 
-void move_over(){
+void move_over() {
   Serial.println(" ");
   Serial.print("Move Over");
-  for(int i = 0; i < 16;i++){
-    for(int j = 0 ;j<4 ; j++){
-      Serial.print(codes_and_values[find_index_of_current_substate(current_resistance_value[i])][j]);
-      Serial.print(" ");
+  for (int i = 0; i < 16; i++) {
+    if (i % 2 == 0) {
+      for (int j = 0; j < 4; j++) {
+        Serial.print(codes_and_values[find_index_of_current_substate(current_resistance_value[i])][j]);
+        Serial.print(" ");
+      }
+    } else {
+      for (int j = 3; j >= 0; j--) {
+        Serial.print(codes_and_values[find_index_of_current_substate(current_resistance_value[i])][j]);
+        Serial.print(" ");
+      }
     }
-    if(i%2) Serial.println(" ");
+    if (i % 2) Serial.println(" ");
     else Serial.print(" ");
-    
   }
   return;
 }
+
 
 ///////////////////////////////////////////////////////////////
 void setup() {

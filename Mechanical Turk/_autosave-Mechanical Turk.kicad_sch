@@ -1200,6 +1200,44 @@
 			)
 		)
 	)
+	(sheet
+		(at 161.29 22.86)
+		(size 41.91 21.59)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "7c080a85-75b1-4964-a96d-bcc83ddaf893")
+		(property "Sheetname" "CNC"
+			(at 161.29 22.1484 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "CNC.kicad_sch"
+			(at 161.29 45.0346 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "Mechanical Turk"
+				(path "/7a1cc36f-228e-4763-bdcf-fd4d5555fb01"
+					(page "4")
+				)
+			)
+		)
+	)
 	(sheet_instances
 		(path "/"
 			(page "1")

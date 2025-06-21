@@ -390,6 +390,10 @@
     [
       "37d02554-8c7c-4608-bec6-7e3fa96b37a3",
       "64 square circuit"
+    ],
+    [
+      "37f0bedb-16c3-448d-8630-ca790b78a8b8",
+      "gripper circuit"
     ]
   ],
   "text_variables": {}
