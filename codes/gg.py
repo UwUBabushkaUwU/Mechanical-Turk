@@ -1,35 +1,37 @@
 import serial
-import keyboard
-import time
+from pynput import keyboard
 
-ser = serial.Serial('COM5', 9600)
-time.sleep(2)
+# Setup serial connection to Arduino on COM6
+ser = serial.Serial('COM6', 9600, timeout=1)
 
-# Map keys to movement directions
-key_map = {
-    'up': 'front',
-    'down': 'back',
-    'left': 'left',
-    'right': 'right'
-}
+# Key press handler
+def on_press(key):
+    try:
+        if key == keyboard.Key.up:
+            ser.write(b"motor1 120\n")
+            print("Sent: motor1 120")
+        elif key == keyboard.Key.down:
+            ser.write(b"motor1 60\n")
+            print("Sent: motor1 60")
+        elif key == keyboard.Key.left:
+            ser.write(b"motor2 0\n")
+            print("Sent: motor2 0")
+        elif key == keyboard.Key.right:
+            ser.write(b"motor2 120\n")
+            print("Sent: motor2 120")
+    except Exception as e:
+        print(f"Error: {e}")
 
-# Track key state to avoid flooding
-key_states = {key: False for key in key_map}
+# Key release handler
+def on_release(key):
+    if key == keyboard.Key.esc:
+        print("Exiting...")
+        return False  # stop listener
 
-print("Hold arrow keys to move. Press ESC to quit.")
+# Start listening to keyboard
+print("Use arrow keys to control motors. Press ESC to quit.")
+with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
+    listener.join()
 
-while True:
-    for key, direction in key_map.items():
-        if keyboard.is_pressed(key):
-            if not key_states[key]:
-                ser.write((f"{direction} start\n").encode())
-                key_states[key] = True
-        else:
-            if key_states[key]:
-                ser.write((f"{direction} stop\n").encode())
-                key_states[key] = False
-
-    if keyboard.is_pressed('esc'):
-        break
-
+# Cleanup
 ser.close()
