@@ -1,27 +1,28 @@
 #include <Servo.h>
 
-Servo motor1; // Lifter servo
-Servo motor2; // Gripper servo
+Servo motor1; // Lifter
+Servo motor2; // Gripper
+
+const float holdTimeSeconds = 2.0;
 
 void setup() {
   Serial.begin(9600);
-  motor1.attach(8); // change as needed
-  motor2.attach(12); // change as needed
+  motor1.attach(8);
+  motor2.attach(12);
 
-  motor2.write(0); // open gripper
-  Serial.println("Ready. Send: <down_time_ms> <hold_time_s>");
+  motor2.write(0); // Open gripper
+  Serial.println("Ready. Format: <piece> <angle> (e.g., pawn 100)");
 }
 
 void loop() {
   static String input = "";
-
-  // Read serial input
   while (Serial.available()) {
     char c = Serial.read();
     if (c == '\n' || c == '\r') {
       if (input.length() > 0) {
-        handleCommand(input);
+        processCommand(input);
         input = "";
+        Serial.println("Ready for next command:");
       }
     } else {
       input += c;
@@ -29,33 +30,61 @@ void loop() {
   }
 }
 
-void handleCommand(String cmd) {
-  int sepIndex = cmd.indexOf(' ');
-  if (sepIndex == -1) {
-    Serial.println("Invalid input. Use: <down_time_ms> <hold_time_s>");
+int getDropTime(String piece) {
+  piece.toLowerCase();
+  if (piece == "queen") return 1600;
+  if (piece == "king") return 1500;
+  if (piece == "knight") return 1650;
+  if (piece == "bishop") return 1750;
+  if (piece == "rook") return 1600;
+  if (piece == "pawn") return 1750;
+  return -1; // Unknown
+}
+
+void processCommand(String input) {
+  input.trim();
+  int spaceIndex = input.indexOf(' ');
+  if (spaceIndex == -1) {
+    Serial.println("Invalid format. Use: <piece> <angle>");
     return;
   }
 
-  int downTime = cmd.substring(0, sepIndex).toInt();
-  float holdTime = 2;
+  String piece = input.substring(0, spaceIndex);
+  int angle = input.substring(spaceIndex + 1).toInt();
+  int downTime = getDropTime(piece);
 
-  Serial.print("Going down for ");
-  Serial.print(downTime);
-  Serial.print("ms, holding for ");
-  Serial.print(holdTime);
-  Serial.println("s, then going up.");
+  if (downTime == -1) {
+    Serial.println("Unknown piece: " + piece);
+    return;
+  }
 
-  // Move down
+  Serial.print("Testing ");
+  Serial.print(piece);
+  Serial.print(" at ");
+  Serial.print(angle);
+  Serial.println(" degrees");
+
+  runCycle(downTime, angle);
+}
+
+void runCycle(int downTime, int angle) {
+  Serial.println("Opening gripper");
+  motor2.write(0);
+  delay(300);
+
+  Serial.println("Lowering...");
   motor1.write(60);
   delay(downTime);
-  motor1.write(90); // stop
-  Serial.println("At bottom position");
+  motor1.write(93); // stop
 
-  delay(holdTime * 1000);
+  Serial.println("Closing gripper");
+  motor2.write(angle);
+  delay(holdTimeSeconds * 1000);
 
-  // Move up
+  Serial.println("Lifting...");
   motor1.write(120);
-  delay(downTime);
-  motor1.write(90); // stop
-  Serial.println("Returned to top");
+  delay(downTime+50);
+  motor1.write(93);
+
+  Serial.println("Done.");
 }
