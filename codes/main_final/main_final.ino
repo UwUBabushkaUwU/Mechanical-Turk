@@ -31,7 +31,7 @@ void setup() {
   pinMode(dirPin2, OUTPUT);
   pinMode(feedback, INPUT);
   motor1.attach(8);
-  motor2.attach(12);
+  motor2.attach(7);
 
   motor2.write(0); // Open gripper
   loadLastPosition();

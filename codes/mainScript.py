@@ -1,18 +1,23 @@
-import chess
-import pygame
-import serial
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 import time
-import msvcrt  # For Windows keyboard input
+import serial
+import chess
 
-# --- Serial Config ---
+# === SETTINGS ===
+USER_DATA_DIR = r"C:\Users\Chinar Mhatre\AppData\Local\Google\Chrome\User Data"  # <-- CHANGE THIS
 SERIAL_PORT = "COM6"
 BAUD_RATE = 9600
-ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
-time.sleep(2)  # Allow Arduino to reset
 
-# --- Chess Board Setup ---
+# === Arduino Setup ===
+ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+print("Connecting to Arduino...")
+time.sleep(2)
+
+# === Board Setup ===
 board = chess.Board()
-move_stack = []
+seen_moves = []
 
 promotion_stash = {
     'q': 'i8',
@@ -21,137 +26,93 @@ promotion_stash = {
     'b': 'i5'
 }
 
-def get_piece_char(piece: chess.Piece):
-    if piece is None:
-        return 'P'
+def get_piece_char(board, move):
+    piece = board.piece_at(move.from_square)
     return piece.symbol().upper() if piece.color == chess.WHITE else piece.symbol().lower()
 
-def convert_move(move: chess.Move):
-    uci = move.uci()
-    from_sq = uci[:2]
-    to_sq = uci[2:4]
-    piece = board.piece_at(move.from_square)
+def convert_move(board, move):
+    from_sq = chess.square_name(move.from_square)
+    to_sq = chess.square_name(move.to_square)
     captured = board.piece_at(move.to_square)
-    promo_piece = move.promotion
+    promo = move.promotion
 
-    converted = []
-
+    commands = []
     if captured:
-        captured_piece = get_piece_char(captured)
-        converted.append(f"{captured_piece}{to_sq}h0")
+        captured_char = captured.symbol().upper()
+        commands.append(f"{captured_char}{to_sq}h0")
 
-    if promo_piece:
-        promo_char = chess.Piece(promo_piece, board.turn).symbol()
-        promo_char = promo_char.lower() if board.turn == chess.BLACK else promo_char.upper()
-        stash_square = promotion_stash[promo_char.lower()]
-        converted.append(f"{promo_char}{stash_square}{to_sq}")
+    if promo:
+        promo_char = chess.Piece(promo, board.turn).symbol().upper()
+        stash = promotion_stash[promo_char.lower()]
+        commands.append(f"{promo_char}{stash}{to_sq}")
     else:
-        piece_char = get_piece_char(piece)
-        converted.append(f"{piece_char}{from_sq}{to_sq}")
-
-    return converted
-
-def send_to_arduino(command_list):
-    for command in command_list:
-        ser.write((command + "\n").encode())
-        print(f"Sent: {command}")
-        wait_for_ack()
+        piece_char = get_piece_char(board, move)
+        commands.append(f"{piece_char}{from_sq}{to_sq}")
+    return commands
 
 def wait_for_ack():
     while True:
         if ser.in_waiting:
             line = ser.readline().decode().strip()
-            print(f"Arduino: {line}")
             if "Move over" in line:
                 break
 
-def draw_board(screen, board, font):
-    colors = [pygame.Color("burlywood1"), pygame.Color("saddlebrown")]
-    square_size = 60
-    screen.fill((0, 0, 0))
+def send_to_arduino(commands):
+    for cmd in commands:
+        print(f"Sending: {cmd}")
+        ser.write((cmd + "\n").encode())
+        wait_for_ack()
 
-    for i in range(8):
-        for j in range(8):
-            color = colors[(i + j) % 2]
-            rect = pygame.Rect(j*square_size, (7-i)*square_size, square_size, square_size)
-            pygame.draw.rect(screen, color, rect)
+# === Browser Setup ===
+options = Options()
+options.add_argument(f"--user-data-dir={USER_DATA_DIR}")
+options.add_argument("--profile-directory=Default")  # or "Profile 1", etc.
+options.add_argument("--start-maximized")
+options.add_argument("--no-sandbox") 
 
-            square_index = chess.square(j, i)
-            piece = board.piece_at(square_index)
-            if piece:
-                label = font.render(piece.symbol(), True, pygame.Color("black"))
-                screen.blit(label, (j*square_size + 20, (7-i)*square_size + 10))
+driver = webdriver.Chrome(options=options)
+driver.get("https://lichess.org")
 
-    pygame.display.flip()
+input("Open a Lichess game as WHITE and press Enter...")
 
-def get_typed_input(prompt, screen, board, font):
-    user_input = ''
-    print(prompt, end='', flush=True)
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                ser.close()
-                exit()
+# === Main Loop ===
+def get_lichess_moves(driver):
+    try:
+        elements = driver.find_elements(By.TAG_NAME, 'kwdb')  # <== updated here
+        moves = [el.text.strip() for el in elements if el.text.strip()]
+        print("Current moves on page:", moves)
+        return moves
+    except Exception as e:
+        print("Error reading moves:", e)
+        return []
 
-        if msvcrt.kbhit():
-            ch = msvcrt.getwch()
-            if ch == '\r':  # Enter key
-                print()
-                return user_input.strip()
-            elif ch == '\x08':  # Backspace
-                user_input = user_input[:-1]
-                print('\r' + prompt + user_input + ' ', end='', flush=True)
-            else:
-                user_input += ch
-                print(ch, end='', flush=True)
+print("Watching opponent's (Black's) moves...")
 
-        draw_board(screen, board, font)
-        pygame.time.delay(10)
+while True:
+    try:
+        all_moves = get_lichess_moves(driver)
+        if len(all_moves) > len(seen_moves):
+            new_moves = all_moves[len(seen_moves):]
 
-def main():
-    pygame.init()
-    screen = pygame.display.set_mode((480, 480))
-    pygame.display.set_caption("Chess Robot Tracker")
-    font = pygame.font.SysFont(None, 36)
-    draw_board(screen, board, font)
+            for san in new_moves:
+                try:
+                    move = board.parse_san(san)
+                except Exception as e:
+                    print(f"Could not parse move '{san}':", e)
+                    continue
 
-    while not board.is_game_over():
-        user_input = get_typed_input("Enter move (e.g., e2e4, Nf3, exd5, e8=Q), or 'undo', 'reset': ", screen, board, font)
+                if board.turn == chess.BLACK:  # Opponent's move
+                    print(f"Opponent move detected: {san}")
+                    cmds = convert_move(board, move)
+                    send_to_arduino(cmds)
 
-        if user_input.lower() == "undo":
-            if len(move_stack) >= 1:
-                board.pop()
-                move_stack.pop()
-                print("Last move undone.")
-                draw_board(screen, board, font)
-            else:
-                print("No moves to undo.")
-            continue
+                board.push(move)
+                seen_moves.append(san)
 
-        elif user_input.lower() == "reset":
-            board.reset()
-            move_stack.clear()
-            print("Game reset.")
-            draw_board(screen, board, font)
-            continue
+        time.sleep(2)
 
-        try:
-            move = board.parse_san(user_input)
-        except ValueError:
-            print("Invalid move format.")
-            continue
-
-        converted = convert_move(move)
-        send_to_arduino(converted)
-
-        board.push(move)
-        move_stack.append(move)
-        draw_board(screen, board, font)
-
-    print("Game over:", board.result())
-    pygame.quit()
-    ser.close()
-
-if __name__ == "__main__":
-    main()
+    except KeyboardInterrupt:
+        print("Exiting...")
+        driver.quit()
+        ser.close()
+        break
